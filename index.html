@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxury Store | Mehruu Dev</title>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background:#0a0a0f;color:white;overflow-x:hidden;scroll-behavior:smooth;}
+a{text-decoration:none;color:white;}
+
+/* NAVBAR */
+header{position:fixed;top:0;width:100%;display:flex;justify-content:space-between;align-items:center;padding:15px 10%;background:rgba(0,0,0,0.6);backdrop-filter:blur(10px);z-index:1000;box-shadow:0 4px 15px rgba(0,0,0,0.3);}
+header .logo{font-size:20px;font-weight:600;color:#a855f7;text-shadow:0 0 8px #a855f7;}
+nav a{margin-left:25px;font-size:14px;text-shadow:0 0 4px #fff;transition:.3s;}
+nav a:hover{color:#a855f7;text-shadow:0 0 8px #a855f7;}
+
+/* HERO */
+.hero{height:100vh;background:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1920&q=80');background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+.hero h1{font-size:4rem;letter-spacing:5px;text-transform:uppercase;text-shadow:0 0 15px #a855f7;}
+.hero p{font-size:1.2rem;margin:20px 0;color:#ccc;}
+.shop-btn{padding:15px 40px;background:#1dbf73;color:white;border-radius:50px;font-weight:bold;transition:.5s;}
+.shop-btn:hover{transform:scale(1.1);box-shadow:0 0 20px #1dbf73;}
+
+/* PRODUCTS */
+.products{padding:100px 10%;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;}
+.card{background:#111;padding:20px;border-radius:15px;text-align:center;transition:.3s;position:relative;}
+.card:hover{border:1px solid #1dbf73;transform:translateY(-5px);box-shadow:0 0 15px #1dbf73;}
+.card img{width:100%;border-radius:10px;height:250px;object-fit:cover;}
+.card h3{margin:15px 0;font-size:1.5rem;}
+.card p{margin-bottom:10px;}
+.add-cart-btn{padding:10px 20px;background:#1dbf73;color:white;border:none;border-radius:25px;cursor:pointer;transition:.3s;}
+.add-cart-btn:hover{transform:scale(1.05);box-shadow:0 0 15px #1dbf73;}
+
+/* CART PANEL */
+.cart-panel{position:fixed;top:0;right:-400px;width:400px;height:100%;background:#111;box-shadow:-4px 0 20px rgba(0,0,0,0.7);padding:20px;transition:.5s;z-index:999;}
+.cart-panel.show{right:0;}
+.cart-panel h2{text-align:center;color:#1dbf73;margin-bottom:20px;}
+.cart-items{max-height:60%;overflow-y:auto;margin-bottom:20px;}
+.cart-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;background:#222;padding:10px;border-radius:10px;}
+.cart-item span{margin-right:10px;}
+.cart-item button{background:red;border:none;padding:5px 10px;border-radius:8px;color:white;cursor:pointer;transition:.3s;}
+.cart-item button:hover{transform:scale(1.1);}
+.cart-total{text-align:right;margin-bottom:20px;font-weight:bold;}
+.checkout-btn{width:100%;padding:12px;background:#1dbf73;border:none;border-radius:25px;font-weight:bold;cursor:pointer;transition:.3s;}
+.checkout-btn:hover{transform:scale(1.05);box-shadow:0 0 15px #1dbf73;}
+.cart-toggle{position:fixed;top:20px;right:20px;background:#1dbf73;color:#000;padding:12px 18px;border-radius:50px;cursor:pointer;font-weight:bold;z-index:1000;transition:.3s;}
+.cart-toggle:hover{transform:scale(1.1);box-shadow:0 0 15px #1dbf73;}
+
+/* FOOTER */
+footer{text-align:center;padding:25px;background:#050505;margin-top:40px;font-size:14px;}
+
+/* SOCIAL ICONS */
+.socials{margin-top:15px;}
+.socials a{margin:0 10px;color:#1dbf73;font-size:18px;transition:.3s;text-shadow:0 0 5px #1dbf73;}
+.socials a:hover{text-shadow:0 0 15px #1dbf73;transform:scale(1.2);}
+
+/* RESPONSIVE */
+@media(max-width:768px){.hero h1{font-size:3rem;}.products{padding:60px 5%;}.cart-panel{width:80%;}}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">Luxury Store</div>
+<nav>
+<a href="#home">Home</a>
+<a href="#products">Products</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+
+<section class="hero" id="home" data-aos="fade-down">
+<h1>Premium Collection</h1>
+<p>Experience Luxury Like Never Before</p>
+<a href="#products" class="shop-btn">Explore Shop</a>
+</section>
+
+<button class="cart-toggle">Cart 🛒</button>
+
+<div class="cart-panel" id="cartPanel">
+<h2>Your Cart</h2>
+<div class="cart-items" id="cartItems"></div>
+<div class="cart-total" id="cartTotal">Total: $0</div>
+<h3>Pay with PayPal:</h3>
+<div id="paypal-button-container"></div>
+</div>
+
+<section class="products" id="products">
+<!-- Product Cards -->
+<div class="card" data-aos="zoom-in">
+<img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80" alt="Luxury Watch">
+<h3>Luxury Watch</h3><p>$250</p>
+<button class="add-cart-btn" data-name="Luxury Watch" data-price="250">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="100">
+<img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80" alt="Beats Pro">
+<h3>Beats Pro</h3><p>$199</p>
+<button class="add-cart-btn" data-name="Beats Pro" data-price="199">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="200">
+<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Sport Sneakers">
+<h3>Sport Sneakers</h3><p>$120</p>
+<button class="add-cart-btn" data-name="Sport Sneakers" data-price="120">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="300">
+<img src="lbag.jfif" alt="Leather Bag">
+<h3>Leather Bag</h3><p>$180</p>
+<button class="add-cart-btn" data-name="Leather Bag" data-price="180">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="400">
+<img src="sunglasses.webp" alt="Sunglasses">
+<h3>Designer Sunglasses</h3><p>$90</p>
+<button class="add-cart-btn" data-name="Designer Sunglasses" data-price="90">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="500">
+<img src="perf.webp" alt="Perfume">
+<h3>Luxury Perfume</h3><p>$70</p>
+<button class="add-cart-btn" data-name="Luxury Perfume" data-price="70">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="600">
+<img src="ring.webp" alt="Diamond Ring">
+<h3>Diamond Ring</h3><p>$500</p>
+<button class="add-cart-btn" data-name="Diamond Ring" data-price="500">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="700">
+<img src="wtch.webp" alt="Smart Watch">
+<h3>Smart Watch</h3><p>$230</p>
+<button class="add-cart-btn" data-name="Smart Watch" data-price="230">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="800">
+<img src="hbag.webp" alt="Handbag">
+<h3>Luxury Handbag</h3><p>$210</p>
+<button class="add-cart-btn" data-name="Luxury Handbag" data-price="210">Add to Cart</button>
+</div>
+<div class="card" data-aos="zoom-in" data-aos-delay="900">
+<img src="shoes.webp" alt="Formal Shoes">
+<h3>Formal Shoes</h3><p>$150</p>
+<button class="add-cart-btn" data-name="Formal Shoes" data-price="150">Add to Cart</button>
+</div>
+</section>
+
+<footer>
+<p>© 2026 Mehruu Dev | Full Stack Developer</p>
+<div class="socials">
+<a href="https://github.com/mehruu" target="_blank">GitHub</a>
+<a href="https://www.fiverr.com/mn_freelancer" target="_blank">Fiverr</a>
+<a href="https://wa.me/923283046932" target="_blank">WhatsApp</a>
+</div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
+<script>
+AOS.init({duration:1000});
+
+// CART FUNCTIONALITY
+const cartPanel=document.getElementById('cartPanel');
+const cartToggle=document.querySelector('.cart-toggle');
+const cartItemsDiv=document.getElementById('cartItems');
+const cartTotalDiv=document.getElementById('cartTotal');
+let cart=[];
+cartToggle.addEventListener('click',()=>{cartPanel.classList.toggle('show');});
+function updateCart(){cartItemsDiv.innerHTML='';let total=0;cart.forEach((item,index)=>{total+=item.price;const div=document.createElement('div');div.classList.add('cart-item');div.innerHTML=`<span>${item.name}</span><span>$${item.price}</span><button onclick="removeItem(${index})">Remove</button>`;cartItemsDiv.appendChild(div);});cartTotalDiv.textContent=`Total: $${total}`;}
+function removeItem(index){cart.splice(index,1);updateCart();}
+document.querySelectorAll('.add-cart-btn').forEach(btn=>{btn.addEventListener('click',()=>{const name=btn.getAttribute('data-name');const price=parseFloat(btn.getAttribute('data-price'));cart.push({name,price});updateCart();btn.textContent="Added ✔";setTimeout(()=>{btn.textContent="Add to Cart";},1500);});});
+
+// PAYPAL SMART BUTTONS
+paypal.Buttons({
+createOrder: function(data, actions) {
+    let total = cart.reduce((sum, item)=>sum+item.price,0);
+    return actions.order.create({purchase_units:[{amount:{value:total.toFixed(2)}}]});
+},
+onApprove: function(data, actions) {
+    return actions.order.capture().then(function(details){
+        alert('Transaction completed by ' + details.payer.name.given_name);
+        cart=[];
+        updateCart();
+    });
+}
+}).render('#paypal-button-container');
+</script>
+</body>
+</html>
